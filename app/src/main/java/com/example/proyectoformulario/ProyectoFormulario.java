@@ -1,31 +1,14 @@
 package com.example.proyectoformulario;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-
-
-import com.example.proyectoformulario.utilidades.EntradaSalida;
-import com.example.proyectoformulario.utilidades.PreferenciaActivity;
-
-import datos.Persona;
-
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.content.FileProvider;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,8 +18,19 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.proyectoformulario.utilidades.EntradaSalida;
+import com.example.proyectoformulario.utilidades.PreferenciaActivity;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import datos.Persona;
 
 public class ProyectoFormulario extends Activity {
 	private EditText nombre;
@@ -49,17 +43,38 @@ public class ProyectoFormulario extends Activity {
 	private List<Persona> personas;
 	private Persona persona;
 	private String estadoCivilSel;
-	
-	private Boolean leerArchivoInicio;   
+
+    private Boolean leerArchivoInicio;
 
 	protected static final int LISTA = 1;
-	
-	private static final String AUTHORITY = "com.example.proyectoformulario.archivo";
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_proyecto_formulario);
+
+    boolean doubleBackToExitPressedOnce;
+
+    @Override
+    public void onBackPressed() {
+
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Presione de nuevo para salir", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_proyecto_formulario);
 
 		nombre = (EditText) findViewById(R.id.nombre);
 		cedula = (EditText) findViewById(R.id.cedula);
@@ -90,11 +105,11 @@ public class ProyectoFormulario extends Activity {
 						estadoCivilSel = "";
 					}
 				});
-		
-		leerPreferencias(); 
-		if (leerArchivoInicio) {
-			try {
-				personas = EntradaSalida.<Persona> leerArchivoObjeto(
+
+        leerPreferencias();
+        if (leerArchivoInicio) {
+            try {
+                personas = EntradaSalida.<Persona> leerArchivoObjeto(
 						getBaseContext().getFileStreamPath("archivo.bin"));
 			} catch (ClassNotFoundException e) {
 			} catch (IOException e) {
@@ -102,13 +117,11 @@ public class ProyectoFormulario extends Activity {
 		}
 
 	}
-	
-	
-	
-	
-	public void alerta(String s) {
-		new AlertDialog.Builder(this)
-		.setMessage(s)
+
+
+    public void alerta(String s) {
+        new AlertDialog.Builder(this)
+                .setMessage(s)
 		.setTitle("ERROR ")
 		.setPositiveButton("OK",
 				new DialogInterface.OnClickListener() {
@@ -118,10 +131,10 @@ public class ProyectoFormulario extends Activity {
 					}
 				}).create().show();
 	}
-	
-	private void leerPreferencias() {
-		SharedPreferences pref = PreferenceManager
-				.getDefaultSharedPreferences(this);
+
+    private void leerPreferencias() {
+        SharedPreferences pref = PreferenceManager
+                .getDefaultSharedPreferences(this);
 
 		leerArchivoInicio = pref.getBoolean("leerAutomatico", false);
 
@@ -130,16 +143,16 @@ public class ProyectoFormulario extends Activity {
 	public void guardar(View v) {
 		Date fecha;
 		Float estatura;
-		
-		try {
-			estatura = Float.parseFloat(this.estatura.getText().toString());
-		}
+
+        try {
+            estatura = Float.parseFloat(this.estatura.getText().toString());
+        }
 		catch (NumberFormatException e) {
 			alerta("Estatura invalida");
 			return;
 		}
-		
-		try {
+
+        try {
 
 			fecha = new SimpleDateFormat("dd/MM/yyyy").parse(fechaNac.getText()
 					.toString());
@@ -150,20 +163,20 @@ public class ProyectoFormulario extends Activity {
 
 
 		persona = new Persona(
-				nombre.getText().toString(), 
-				cedula.getText().toString(), 
-				fecha, 
-				estadoCivilSel, 
-				discapacitado.isChecked(),
-				estatura);
+                nombre.getText().toString(),
+                cedula.getText().toString(),
+                fecha,
+                estadoCivilSel,
+                discapacitado.isChecked(),
+                estatura);
 
 		personas.add(persona);
 
 		try {
-			EntradaSalida.<Persona>escribirArchivoObjeto( 
-					getBaseContext().getFileStreamPath("archivo.bin"),
-					personas);
-		} catch (Exception e) {
+            EntradaSalida.<Persona>escribirArchivoObjeto(
+                    getBaseContext().getFileStreamPath("archivo.bin"),
+                    personas);
+        } catch (Exception e) {
 			Toast.makeText(this, "ERROR " + e.toString(), Toast.LENGTH_LONG)
 					.show();
 		}
@@ -217,10 +230,10 @@ public class ProyectoFormulario extends Activity {
 			break;
 		case R.id.action_settings:
 			try {
-				
-				personas = EntradaSalida.<Persona> leerArchivoObjeto(
-						getBaseContext().getFileStreamPath("archivo.bin"));
-				return true;
+
+                personas = EntradaSalida.<Persona>leerArchivoObjeto(
+                        getBaseContext().getFileStreamPath("archivo.bin"));
+                return true;
 			} catch (Exception e) {
 				Toast.makeText(this, "ERROR " + e.toString(), Toast.LENGTH_LONG)
 						.show();
@@ -229,10 +242,10 @@ public class ProyectoFormulario extends Activity {
 			finally {
 				break;
 			}
-			
-		default:
-			return super.onOptionsItemSelected(item);
-		}
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 		return false;
 	}
 
