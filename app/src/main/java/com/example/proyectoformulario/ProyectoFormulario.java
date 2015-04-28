@@ -33,20 +33,20 @@ import java.util.List;
 import datos.Persona;
 
 public class ProyectoFormulario extends Activity {
-	private EditText nombre;
-	private EditText cedula;
-	private EditText fechaNac;
-	private Spinner estadoCivil;
-	private CheckBox discapacitado;
-	private EditText estatura;
+    private EditText nombre;
+    private EditText cedula;
+    private EditText fechaNac;
+    private Spinner estadoCivil;
+    private CheckBox discapacitado;
+    private EditText estatura;
 
-	private List<Persona> personas;
-	private Persona persona;
-	private String estadoCivilSel;
+    private List<Persona> personas;
+    private Persona persona;
+    private String estadoCivilSel;
 
     private Boolean leerArchivoInicio;
 
-	protected static final int LISTA = 1;
+    protected static final int LISTA = 1;
 
 
     boolean doubleBackToExitPressedOnce;
@@ -76,93 +76,92 @@ public class ProyectoFormulario extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proyecto_formulario);
 
-		nombre = (EditText) findViewById(R.id.nombre);
-		cedula = (EditText) findViewById(R.id.cedula);
-		fechaNac = (EditText) findViewById(R.id.fechaNac);
-		estadoCivil = (Spinner) findViewById(R.id.estadoCivil);
-		discapacitado = (CheckBox) findViewById(R.id.discapacitado);
-		estatura = (EditText) findViewById(R.id.estatura);
+        nombre = (EditText) findViewById(R.id.nombre);
+        cedula = (EditText) findViewById(R.id.cedula);
+        fechaNac = (EditText) findViewById(R.id.fechaNac);
+        estadoCivil = (Spinner) findViewById(R.id.estadoCivil);
+        discapacitado = (CheckBox) findViewById(R.id.discapacitado);
+        estatura = (EditText) findViewById(R.id.estatura);
 
-		estadoCivilSel = "Casado";
+        estadoCivilSel = "Casado";
 
-		personas = new ArrayList<Persona>();
+        personas = new ArrayList<Persona>();
 
-		ArrayAdapter<CharSequence> adaptador = ArrayAdapter.createFromResource(
-				this, R.array.estado_civil,
-				android.R.layout.simple_spinner_item);
-		adaptador.setDropDownViewResource(android.R.layout.simple_spinner_item);
-		estadoCivil.setAdapter(adaptador);
+        ArrayAdapter<CharSequence> adaptador = ArrayAdapter.createFromResource(
+                this, R.array.estado_civil,
+                android.R.layout.simple_spinner_item);
+        adaptador.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        estadoCivil.setAdapter(adaptador);
 
-		estadoCivil
-				.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-					public void onItemSelected(AdapterView<?> parent,
-							android.view.View v, int position, long id) {
-						estadoCivilSel = getResources().getStringArray(
-								R.array.estado_civil)[position];
-					}
+        estadoCivil
+                .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    public void onItemSelected(AdapterView<?> parent,
+                                               android.view.View v, int position, long id) {
+                        estadoCivilSel = getResources().getStringArray(
+                                R.array.estado_civil)[position];
+                    }
 
-					public void onNothingSelected(AdapterView<?> parent) {
-						estadoCivilSel = "";
-					}
-				});
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        estadoCivilSel = "";
+                    }
+                });
 
         leerPreferencias();
         if (leerArchivoInicio) {
             try {
-                personas = EntradaSalida.<Persona> leerArchivoObjeto(
-						getBaseContext().getFileStreamPath("archivo.bin"));
-			} catch (ClassNotFoundException e) {
-			} catch (IOException e) {
-			}
-		}
+                personas = EntradaSalida.<Persona>leerArchivoObjeto(
+                        getBaseContext().getFileStreamPath("archivo.bin"));
+            } catch (ClassNotFoundException e) {
+            } catch (IOException e) {
+            }
+        }
 
-	}
+    }
 
 
     public void alerta(String s) {
         new AlertDialog.Builder(this)
                 .setMessage(s)
-		.setTitle("ERROR ")
-		.setPositiveButton("OK",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int id) {
-						dialog.dismiss();
-					}
-				}).create().show();
-	}
+                .setTitle("ERROR ")
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+                                dialog.dismiss();
+                            }
+                        }).create().show();
+    }
 
     private void leerPreferencias() {
         SharedPreferences pref = PreferenceManager
                 .getDefaultSharedPreferences(this);
 
-		leerArchivoInicio = pref.getBoolean("leerAutomatico", false);
+        leerArchivoInicio = pref.getBoolean("leerAutomatico", false);
 
-	}
+    }
 
-	public void guardar(View v) {
-		Date fecha;
-		Float estatura;
+    public void guardar(View v) {
+        Date fecha;
+        Float estatura;
 
         try {
             estatura = Float.parseFloat(this.estatura.getText().toString());
+        } catch (NumberFormatException e) {
+            alerta("Estatura invalida");
+            return;
         }
-		catch (NumberFormatException e) {
-			alerta("Estatura invalida");
-			return;
-		}
 
         try {
 
-			fecha = new SimpleDateFormat("dd/MM/yyyy").parse(fechaNac.getText()
-					.toString());
-		} catch (ParseException e) {
-			alerta("Fecha invalida");
-			return;
-		}
+            fecha = new SimpleDateFormat("dd/MM/yyyy").parse(fechaNac.getText()
+                    .toString());
+        } catch (ParseException e) {
+            alerta("Fecha invalida");
+            return;
+        }
 
 
-		persona = new Persona(
+        persona = new Persona(
                 nombre.getText().toString(),
                 cedula.getText().toString(),
                 fecha,
@@ -170,83 +169,82 @@ public class ProyectoFormulario extends Activity {
                 discapacitado.isChecked(),
                 estatura);
 
-		personas.add(persona);
+        personas.add(persona);
 
-		try {
+        try {
             EntradaSalida.<Persona>escribirArchivoObjeto(
                     getBaseContext().getFileStreamPath("archivo.bin"),
                     personas);
         } catch (Exception e) {
-			Toast.makeText(this, "ERROR " + e.toString(), Toast.LENGTH_LONG)
-					.show();
-		}
+            Toast.makeText(this, "ERROR " + e.toString(), Toast.LENGTH_LONG)
+                    .show();
+        }
 
-		Log.i("TRAZA", "Paso 2");
-		nombre.setText("");
-		cedula.setText("");
-		fechaNac.setText("");
-		estadoCivil.setSelection(0);
-		discapacitado.setChecked(false);
-		this.estatura.setText("0.0");
+        Log.i("TRAZA", "Paso 2");
+        nombre.setText("");
+        cedula.setText("");
+        fechaNac.setText("");
+        estadoCivil.setSelection(0);
+        discapacitado.setChecked(false);
+        this.estatura.setText("0.0");
 
-	}
+    }
 
-	public void lista(View v) {
-		Intent intent = new Intent(this, Lista.class);
-		intent.putParcelableArrayListExtra("lista",
-				(ArrayList<? extends Parcelable>) personas);
-		startActivityForResult(intent, LISTA);
+    public void lista(View v) {
+        Intent intent = new Intent(this, Lista.class);
+        intent.putParcelableArrayListExtra("lista",
+                (ArrayList<? extends Parcelable>) personas);
+        startActivityForResult(intent, LISTA);
 
-	}
+    }
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-		switch (requestCode) {
-		case LISTA:
-			Toast.makeText(
-					this,
-					String.valueOf(resultCode) + " "
-							+ data.getStringExtra("resultado"),
-					Toast.LENGTH_LONG).show();
-			break;
+        switch (requestCode) {
+            case LISTA:
+                Toast.makeText(
+                        this,
+                        String.valueOf(resultCode) + " "
+                                + data.getStringExtra("resultado"),
+                        Toast.LENGTH_LONG).show();
+                break;
 
-		}
-	}
+        }
+    }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.proyecto_formulario, menu);
-		return true;
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.proyecto_formulario, menu);
+        return true;
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.itemPreferencia:
-			startActivity(new Intent(this,PreferenciaActivity.class));
-			break;
-		case R.id.action_settings:
-			try {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.itemPreferencia:
+                startActivity(new Intent(this, PreferenciaActivity.class));
+                break;
+            case R.id.action_settings:
+                try {
 
-                personas = EntradaSalida.<Persona>leerArchivoObjeto(
-                        getBaseContext().getFileStreamPath("archivo.bin"));
-                return true;
-			} catch (Exception e) {
-				Toast.makeText(this, "ERROR " + e.toString(), Toast.LENGTH_LONG)
-						.show();
-				return false;
-			}
-			finally {
-				break;
-			}
+                    personas = EntradaSalida.<Persona>leerArchivoObjeto(
+                            getBaseContext().getFileStreamPath("archivo.bin"));
+                    return true;
+                } catch (Exception e) {
+                    Toast.makeText(this, "ERROR " + e.toString(), Toast.LENGTH_LONG)
+                            .show();
+                    return false;
+                } finally {
+                    break;
+                }
 
             default:
                 return super.onOptionsItemSelected(item);
         }
-		return false;
-	}
+        return false;
+    }
 
 }
