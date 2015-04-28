@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/listaNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/listaCedula"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/listaNombre"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/listaFechaNac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/listaNombre"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/listaEstadoCivil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/listaCedula"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/listaDiscapacitado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/listaEstadoCivil"
+        android:layout_alignBottom="@+id/listaEstadoCivil"
+        android:layout_alignParentRight="true"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/listaEstatura"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/listaEstadoCivil"
+        android:text="TextView" />
+
+</RelativeLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ProyectoFormulario</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="nombre">Nombre</string>
+    <string name="cedula">Cedula</string>
+    <string name="fechaNac">Fecha de Nacimiento</string>
+    <string name="estadoCivil">Estado Civil</string>
+    <string name="discapacitado">Discapacitado</string>
+    <string name="estatura">Estatura</string>
+    <string name="guardar">Guardar</string>
+    <string name="lista">Lista</string>
+    <string name="leer">Leer archivo</string>
+    <string name="preferencias">Preferencias</string>
+
+    <string-array name="estado_civil">
+        <item>Casado</item>
+        <item>Soltero</item>
+        <item>Viudo</item>
+        <item>Union Libre</item>
+        <item>Divorciado</item>
+    </string-array>
+
+    <string name="title_activity_lista">Lista</string>
+
+    <string name="exportar">Exportar</string>
+
+</resources>
