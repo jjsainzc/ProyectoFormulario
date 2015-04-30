@@ -12,6 +12,14 @@
         -->
     </style>
 
+    <style name="BlackTheme" parent="android:Theme.Black">
+
+    </style>
+
+    <style name="DarkTheme" parent="android:Theme.Holo">
+
+    </style>
+
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->

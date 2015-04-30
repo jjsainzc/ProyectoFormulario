@@ -84,6 +84,8 @@ public final class R {
         /**  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f080001;
+        public static final int BlackTheme=0x7f080002;
+        public static final int DarkTheme=0x7f080003;
     }
     public static final class xml {
         public static final int preferencias=0x7f040000;

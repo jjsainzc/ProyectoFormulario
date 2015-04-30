@@ -75,6 +75,7 @@ public class ProyectoFormulario extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proyecto_formulario);
+        setTheme(R.style.DarkTheme);
 
         nombre = (EditText) findViewById(R.id.nombre);
         cedula = (EditText) findViewById(R.id.cedula);
